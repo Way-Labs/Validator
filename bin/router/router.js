@@ -1,13 +1,30 @@
-const { urlChecker } = require("./checker")
+const { keyFileExistChecker, keyGenerator, keyRead } = require("./checker")
+const path = require('path')
+const os = require('os')
 
-function startHandler(argv) {
-    console.log('hello world')
-    //first check argument
-    urlChecker(argv, 'key')
+const KEY_PATH = path.join(os.homedir(), '.way/key-pair')
+let keypair = {}
+function startHandler({ network, mempool, geth }) {
+    //console.log('hello world')
+    //initializing...
+    //working directory ~/.way/private-key.
+
+    if (!keyFileExistChecker(KEY_PATH)) {
+        //generate key
+        keypair = keyGenerator(KEY_PATH)
+    } else {
+        //read from file.
+        keypair = keyRead(KEY_PATH)
+    }
+    console.log('router!s', keypair)
+    //now check the url and then subscribe to header
+
+    console.log(mempool)
+    console.log(geth)
+    console.log(network)
+
 }
 
-function genkeyHandler(argv) {
 
-}
 
-module.exports = { startHandler, genkeyHandler }
+module.exports = { startHandler }
